@@ -7,6 +7,8 @@ services:
       args:
         GOPROXY: ${GOPROXY:-https://proxy.golang.org,direct}
         BUILDKIT_SYNTAX: ${BUILDKIT_SYNTAX:-docker/dockerfile:1.7}
+    volumes:
+      - ../../../apps/web/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
 
   space:
     image: ninggc/plane-space:${FORK_IMAGE_TAG:-v1.5.0-nioint}
@@ -21,6 +23,8 @@ services:
       dockerfile: apps/admin/Dockerfile.admin
       args:
         GOPROXY: ${GOPROXY:-https://proxy.golang.org,direct}
+    volumes:
+      - ../../../apps/admin/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
 
   live:
     image: ninggc/plane-live:${FORK_IMAGE_TAG:-v1.5.0-nioint}
