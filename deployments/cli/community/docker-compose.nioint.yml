@@ -1,0 +1,58 @@
+services:
+  web:
+    image: ninggc/plane-frontend:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+    build:
+      context: ../../..
+      dockerfile: apps/web/Dockerfile.web
+
+  space:
+    image: ninggc/plane-space:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+    build:
+      context: ../../..
+      dockerfile: apps/space/Dockerfile.space
+
+  admin:
+    image: ninggc/plane-admin:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+    build:
+      context: ../../..
+      dockerfile: apps/admin/Dockerfile.admin
+
+  live:
+    image: ninggc/plane-live:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+    build:
+      context: ../../..
+      dockerfile: apps/live/Dockerfile.live
+
+  api:
+    image: ninggc/plane-backend:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+    build:
+      context: ../../../apps/api
+      dockerfile: Dockerfile.api
+
+  worker:
+    image: ninggc/plane-backend:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+
+  beat-worker:
+    image: ninggc/plane-backend:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+
+  migrator:
+    image: ninggc/plane-backend:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+
+  proxy:
+    image: ninggc/plane-proxy:${FORK_IMAGE_TAG:-v1.5.0-nioint}
+    build:
+      context: ../../../apps/proxy
+      dockerfile: Dockerfile.ce
+      args:
+        GOPROXY: ${GOPROXY:-https://proxy.golang.org,direct}
+    ports: !override
+      - target: 80
+        host_ip: ${LISTEN_HOST_IP:-0.0.0.0}
+        published: ${LISTEN_HTTP_PORT:-80}
+        protocol: tcp
+        mode: host
+      - target: 443
+        host_ip: ${LISTEN_HTTPS_HOST_IP:-127.0.0.1}
+        published: ${LISTEN_HTTPS_PORT:-443}
+        protocol: tcp
+        mode: host

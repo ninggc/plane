@@ -1,5 +1,8 @@
 FROM caddy:2.11.7-builder-alpine AS caddy-builder
 
+ARG GOPROXY=https://proxy.golang.org,direct
+ENV GOPROXY=${GOPROXY}
+
 # grpc and otel move together: grpc >= v1.83.0 requires otel v1.44.0, and xcaddy
 # resolves these --with pins in one `go get`, so a stale otel pin makes go walk
 # grpc backwards until it finds one that fits (silently, with a zero exit) --
