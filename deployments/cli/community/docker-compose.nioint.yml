@@ -4,6 +4,9 @@ services:
     build:
       context: ../../..
       dockerfile: apps/web/Dockerfile.web
+      args:
+        GOPROXY: ${GOPROXY:-https://proxy.golang.org,direct}
+        BUILDKIT_SYNTAX: ${BUILDKIT_SYNTAX:-docker/dockerfile:1.7}
 
   space:
     image: ninggc/plane-space:${FORK_IMAGE_TAG:-v1.5.0-nioint}
@@ -16,12 +19,16 @@ services:
     build:
       context: ../../..
       dockerfile: apps/admin/Dockerfile.admin
+      args:
+        GOPROXY: ${GOPROXY:-https://proxy.golang.org,direct}
 
   live:
     image: ninggc/plane-live:${FORK_IMAGE_TAG:-v1.5.0-nioint}
     build:
       context: ../../..
       dockerfile: apps/live/Dockerfile.live
+      args:
+        BUILDKIT_SYNTAX: ${BUILDKIT_SYNTAX:-docker/dockerfile:1.7}
 
   api:
     image: ninggc/plane-backend:${FORK_IMAGE_TAG:-v1.5.0-nioint}
